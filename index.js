@@ -17,7 +17,7 @@ var url, saveDir;
 
 // Set up the Server
 var app = express();
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 8080;
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -162,6 +162,8 @@ var devices = [
 
 // Loop through our device list and run the program
 function loop(url, res){
+    console.log('Entering loop...');
+    
     var counter = 0;
     devices.forEach(function(device){
         var globalDistance = 0;
@@ -169,6 +171,8 @@ function loop(url, res){
 
         // Declare our use() functions
         var hideScrollBar = function() {
+            console.log('Hiding scrollbar');
+            
             return function(shutterbug){
                 shutterbug
                     .evaluate(function(){
@@ -179,6 +183,8 @@ function loop(url, res){
 
         var getDimensions = function(){
             return function (shutterbug) {
+                console.log('Getting dimensions');
+                
                 shutterbug
                     .evaluate(function () {
                         var windowWidth = window.innerWidth;
@@ -251,6 +257,12 @@ function loop(url, res){
                         console.error('Search failed:', error);
                     });
                 }) 
+                .catch(function(error){
+                    console.error('Error at "getDimensions()":', error);
+                });
+            })
+            .catch(function(error){
+                console.error('Error at "hideScrollBar()":', error);
             });
     });
     
